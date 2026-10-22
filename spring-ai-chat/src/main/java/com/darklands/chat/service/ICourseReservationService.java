@@ -1,0 +1,16 @@
+package com.darklands.chat.service;
+
+import com.darklands.chat.entity.po.CourseReservation;
+import com.baomidou.mybatisplus.extension.service.IService;
+
+/**
+ * <p>
+ * 课程预约 服务类
+ * </p>
+ *
+ * @author author1
+ * @since 2026-10-21
+ */
+public interface ICourseReservationService extends IService<CourseReservation> {
+
+}

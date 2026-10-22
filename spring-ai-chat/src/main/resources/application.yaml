@@ -1,0 +1,46 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: spring-ai-chat
+  datasource:
+    url: jdbc:mysql://localhost:3306/itheima_ai?serverTimezone=Asia/Shanghai&characterEncoding=utf8
+    username: root
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  ai:
+    # 项目里手动创建了多个 ChatClient，关闭自动配置的 ChatClient.Builder，
+    # 避免多个 ChatModel 导致注入歧义
+    chat:
+      client:
+        enabled: false
+    deepseek:
+      # 从 IDEA 运行配置的环境变量注入
+      api-key: ${DEEPSEEK_API_KEY}
+      chat:
+        options:
+          model: deepseek-chat
+    openai:
+      # 智谱 GLM 走 OpenAI 兼容协议
+      # 需要在 IDEA 运行配置里设置 ZHIPUAI_API_KEY
+      api-key: ${ZHIPUAI_API_KEY}
+      base-url: https://open.bigmodel.cn/api/paas/v4
+      chat:
+        options:
+          # 默认使用 glm-4-flash，可用 ZHIPU_CHAT_MODEL 覆盖
+          model: ${ZHIPU_CHAT_MODEL:glm-4-flash}
+          temperature: 0.9
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true #开启下划线和驼峰命名的映射
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto #指定主键生成策略 这里是全局自增
+  mapper-locations: classpath*:/mapper/**/*.xml #表示Mapper.xml文件的地址 默认值
+
+logging:
+  level:
+    org.springframework.ai.chat.client.advisor: DEBUG
+    com.darklands.chat: debug
