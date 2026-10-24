@@ -112,7 +112,7 @@ public class CourseTools {
 
     @Tool(description = """
             根据手机号查询预约记录。
-            返回预约 ID、课程名称、校区名称、状态、备注和创建时间。
+            返回预约 ID、课程名称、校区名称、状态和创建时间。
             用户问自己的预约、报名进度时使用。
             """)
     public List<ReservationInfo> queryReservation(
@@ -154,12 +154,10 @@ public class CourseTools {
             School school = schoolMap.get(reservation.getSchoolId());
             return new ReservationInfo(
                     reservation.getId(),
-                    reservation.getUserName(),
                     maskPhone(reservation.getPhone()),
                     course == null ? "未知课程" : course.getName(),
                     school == null ? "未知校区" : school.getName(),
                     reservation.getStatus(),
-                    reservation.getRemark(),
                     reservation.getCreatedAt() == null
                             ? ""
                             : reservation.getCreatedAt().format(DATE_TIME_FORMATTER));
@@ -214,9 +212,8 @@ public class CourseTools {
                         .last("LIMIT 1"));
 
         if (existing != null) {
-            return ReservationResult.ok(existing.getId(),
-                    "你已经在 " + school.getName() + " 预约过 " + course.getName()
-                            + "，预约编号是 " + existing.getId() + "，请勿重复提交。");
+            return ReservationResult.ok(null,
+                    "该手机号在这门课和校区已经有一条待确认的预约，请勿重复提交。");
         }
 
         CourseReservation reservation = new CourseReservation()
@@ -285,12 +282,10 @@ public class CourseTools {
     }
 
     public record ReservationInfo(Long id,
-                                  String userName,
                                   String phone,
                                   String courseName,
                                   String schoolName,
                                   String status,
-                                  String remark,
                                   String createdAt) {
     }
 

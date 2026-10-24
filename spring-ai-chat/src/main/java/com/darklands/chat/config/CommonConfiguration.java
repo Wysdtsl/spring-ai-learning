@@ -121,10 +121,9 @@ public class CommonConfiguration {
                                         CourseTools courseTools) {
         return ChatClient.builder(model)
                 .defaultSystem(SystemConstants.SERVICE_PROMPT)
-                .defaultAdvisors(
-                        MessageChatMemoryAdvisor.builder(chatMemory).build(),
-                        new SimpleLoggerAdvisor()
-                )
+                // 不挂 SimpleLoggerAdvisor：工具参数和结果里有手机号、姓名等 PII。
+                // 本地调试需要看请求时，再临时加回。
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .defaultTools(courseTools)
                 .build();
     }
