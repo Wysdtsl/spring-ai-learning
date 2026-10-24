@@ -2,6 +2,7 @@ package com.darklands.chat.config;
 
 
 import com.darklands.chat.constants.SystemConstants;
+import com.darklands.chat.tools.CourseTools;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -105,6 +106,26 @@ public class CommonConfiguration {
                         MessageChatMemoryAdvisor.builder(chatMemory).build(),
                         new SimpleLoggerAdvisor()
                 )
+                .build();
+    }
+
+    /**
+     * 智能客服专用：DeepSeek + 课程/校区/预约工具。
+     * CourseTools 由 Spring 注入，内部依赖三个 Service，不能直接 new。
+     */
+
+    /*@Bean 方法的参数，Spring 会自动从容器里按类型找 Bean 传进来。*/
+    @Bean
+    public ChatClient serviceChatClient(DeepSeekChatModel model,
+                                        ChatMemory chatMemory,
+                                        CourseTools courseTools) {
+        return ChatClient.builder(model)
+                .defaultSystem(SystemConstants.SERVICE_PROMPT)
+                .defaultAdvisors(
+                        MessageChatMemoryAdvisor.builder(chatMemory).build(),
+                        new SimpleLoggerAdvisor()
+                )
+                .defaultTools(courseTools)
                 .build();
     }
 }

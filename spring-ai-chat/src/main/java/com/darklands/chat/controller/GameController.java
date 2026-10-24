@@ -18,7 +18,7 @@ public class GameController {
     }
 
 
-    @RequestMapping(value = "/game/stream", produces = "text/html;charset=utf-8")
+    @RequestMapping(value = "/game/stream", produces = "text/plain;charset=utf-8")
     public Flux<String> chatStream(@RequestParam("prompt") String prompt,
                                    @RequestParam("chatId") String chatId) {
         //2、请求模型

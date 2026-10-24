@@ -77,7 +77,7 @@ public class CorsConfig implements WebMvcConfigurer {
 四个聊天接口都是 `GET`，返回类型为：
 
 ```java
-produces = "text/html;charset=UTF-8"
+produces = "text/plain;charset=UTF-8"
 ```
 
 Spring MVC 返回 `Flux<String>`，每个字符串是模型返回的一小段文本。前端使用 `fetch` + `ReadableStream` 读取原始文本块，**不是 SSE**，所以没有 `data:` 前缀。
@@ -85,7 +85,7 @@ Spring MVC 返回 `Flux<String>`，每个字符串是模型返回的一小段文
 示例：
 
 ```java
-@GetMapping(value = "/chat/stream", produces = "text/html;charset=UTF-8")
+@GetMapping(value = "/chat/stream", produces = "text/plain;charset=UTF-8")
 public Flux<String> chat(@RequestParam String prompt,
                          @RequestParam String chatId) {
     return chatClient.prompt()
@@ -168,12 +168,12 @@ GET /ai/chat/stream?prompt=你好&chatId=chat_1720000000000_abc123
 | `prompt` | string | 是 | 用户输入 |
 | `chatId` | string | 是 | 会话 ID |
 
-响应：`text/html;charset=UTF-8` 文本流。
+响应：`text/plain;charset=UTF-8` 文本流。
 
 后端参考：
 
 ```java
-@GetMapping(value = "/chat/stream", produces = "text/html;charset=UTF-8")
+@GetMapping(value = "/chat/stream", produces = "text/plain;charset=UTF-8")
 public Flux<String> chat(@RequestParam String prompt,
                          @RequestParam String chatId) {
     chatHistoryRepository.save("chat", chatId);
@@ -301,7 +301,7 @@ GET /ai/service/stream?prompt=有哪些 Java 课程&chatId=service_1720000000000
 后端参考：
 
 ```java
-@GetMapping(value = "/service/stream", produces = "text/html;charset=UTF-8")
+@GetMapping(value = "/service/stream", produces = "text/plain;charset=UTF-8")
 public Flux<String> service(@RequestParam String prompt,
                             @RequestParam String chatId) {
     chatHistoryRepository.save("service", chatId);

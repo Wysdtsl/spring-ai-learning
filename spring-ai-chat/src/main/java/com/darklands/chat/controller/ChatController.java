@@ -138,7 +138,7 @@ public class ChatController {
 .advisors(a -> a.param(...)) 不是在“组装请求”，它只是往请求的 context 里放一个参数。
     * */
     //会话记忆调用层
-    @RequestMapping(value = "/chat/stream", produces = "text/html;charset=utf-8")
+    @RequestMapping(value = "/chat/stream", produces = "text/plain;charset=utf-8")
     public Flux<String> chatStream(@RequestParam("prompt") String prompt,
                                    @RequestParam("chatId") String chatId) {
             //1、保存会话id
